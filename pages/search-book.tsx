@@ -31,7 +31,7 @@ const SearchBook = () => {
 
   const saveToDb = async (bookInfo: BookInfo) => {
     const response = await axios.patch("http://localhost:3001/db/addBook", {
-      userId: 1,
+      userId: 4,
       title: bookInfo.title,
       link: bookInfo.link,
       imgPath: bookInfo.src,
@@ -42,6 +42,7 @@ const SearchBook = () => {
 
   return (
     <Layout title="Search Book">
+      <h2 className="text-3xl mb-10">Search Book</h2>
       <div className="flex flex-1 justify-center items-center flex-col w-screen">
         <p>例: フロントエンドエンジニア　本</p>
         <input
