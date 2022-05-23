@@ -70,7 +70,7 @@ const Layout: React.FC<TITLE> = ({ children, title = "Nextjs" }) => {
 
               {/* <!-- buttons - start --> */}
               <div className="hidden lg:flex flex-col sm:flex-row sm:justify-center lg:justify-start gap-2.5 -ml-8">
-                <Link href="/admin-page">
+                <Link href="/signin-page">
                   <a
                     data-testid="signin-nav"
                     className="inline-block focus-visible:ring ring-indigo-300 text-gray-500 hover:text-indigo-500 active:text-indigo-600 text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-4 py-3"
@@ -78,13 +78,15 @@ const Layout: React.FC<TITLE> = ({ children, title = "Nextjs" }) => {
                     Sign in
                   </a>
                 </Link>
-
+                <Link href="/signup-page">
                 <a
-                  href="#"
+                  data-testid="signup-nav"
                   className="inline-block bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700 focus-visible:ring ring-indigo-300 text-white text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3"
                 >
                   Sign up
                 </a>
+
+                </Link>
               </div>
 
               <button
