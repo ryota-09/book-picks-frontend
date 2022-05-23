@@ -19,12 +19,11 @@ const Login: React.FC = ({}) => {
         email: email,
         password: password,
       });
-      console.log(response.data);
-      // const option = { path: "/" };
+      // const option = { path: "/" }う
       // cookie.set("access_token", response.data, option);
       router.push("/book-collection");
-    } catch (error) {
-      console.log(error);
+    } catch {
+      setError("ログインエラーが発生しました。")
     }
   };
 
