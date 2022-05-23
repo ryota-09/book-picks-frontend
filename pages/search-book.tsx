@@ -6,6 +6,7 @@ import { BookInfo } from "../types/BookInfo";
 import Link from "next/link";
 import Image from "next/image";
 import Layout from "../components/Layout";
+import { useCurrentUser } from "../lib/useCurrentUser";
 
 type ScrapingResponseType = {
   sourceUrl: string;
@@ -16,6 +17,8 @@ const SearchBook = () => {
   const [searchText, setSearchText] = useState("");
   const [sourceUrl, setSourceUrl] = useState("");
   const [bookInfoList, setBookInfoList] = useState<BookInfo[]>([]);
+
+  const { userState } = useCurrentUser();
 
   const changeText = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchText(event.target.value);
@@ -32,7 +35,7 @@ const SearchBook = () => {
 
   const saveToDb = async (bookInfo: BookInfo) => {
     const response = await axios.patch("http://localhost:3001/db/addBook", {
-      userId: 4,
+      userId: userState.currentUser.userId,
       title: bookInfo.title,
       link: bookInfo.link,
       imgPath: bookInfo.src,
