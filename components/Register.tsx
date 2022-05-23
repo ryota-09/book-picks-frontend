@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { useCurrentUser } from "../lib/useCurrentUser";
+import { UserModel } from "../types/UserModel";
 
 const Register: React.FC = ({}) => {
   const router = useRouter();
@@ -9,6 +11,8 @@ const Register: React.FC = ({}) => {
   const [password, setPassword] = useState("");
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState("");
+
+  const { setUserState } = useCurrentUser();
 
   const login = async (email: string, password: string) => {
     try {
@@ -20,6 +24,13 @@ const Register: React.FC = ({}) => {
       console.log(response.data);
       // const option = { path: "/" };
       // cookie.set("access_token", response.data, option);
+      setUserState({
+        type: "SET_CURRENT_USER",
+        payload: {
+          currentUser: response.data.user,
+          isLogin: true,
+        },
+      });
       router.push("/book-collection");
     } catch (error) {
       console.log(error);

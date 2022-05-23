@@ -43,7 +43,7 @@ const SearchBook = () => {
 
   return (
     <Layout title="Search Book">
-      <h2 className="text-3xl mb-10">Search Book</h2>
+      <h2 className="text-3xl mb-10">Search Books</h2>
       <div className="flex flex-1 justify-center items-center flex-col w-screen">
         <p>例: フロントエンドエンジニア　本</p>
         <input

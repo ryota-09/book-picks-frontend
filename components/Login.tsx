@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Cookie from "universal-cookie";
+import { useCurrentUser } from "../lib/useCurrentUser";
 
 const cookie = new Cookie();
 
@@ -10,6 +11,8 @@ const Login: React.FC = ({}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const { setUserState } = useCurrentUser();
 
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,9 +24,16 @@ const Login: React.FC = ({}) => {
       });
       // const option = { path: "/" }う
       // cookie.set("access_token", response.data, option);
+      setUserState({
+        type: "SET_CURRENT_USER",
+        payload: {
+          currentUser: response.data.user,
+          isLogin: true,
+        },
+      });
       router.push("/book-collection");
     } catch {
-      setError("ログインエラーが発生しました。")
+      setError("ログインエラーが発生しました。");
     }
   };
 

@@ -39,7 +39,7 @@ const reducer = (state: State, action: Action) => {
     case "SET_CURRENT_USER":
       return {
         currentUser: action.payload.currentUser,
-        isLogin: state.isLogin,
+        isLogin: action.payload.isLogin,
       };
     case "TOGGLE_ISLOGIN":
       return {
