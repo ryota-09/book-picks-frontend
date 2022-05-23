@@ -1,11 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import useSWR from "swr";
+import Edit from "../components/Edit";
 import Layout from "../components/Layout";
 import { useCurrentUser } from "../lib/useCurrentUser";
+import Cookie from "universal-cookie";
 
 import { ReturnCollectionType } from "../types/BookCollection";
+
+const cookie = new Cookie();
 
 const axiosFetcher = async (userId: string) => {
   const response = await axios.get<ReturnCollectionType>(
@@ -16,6 +22,7 @@ const axiosFetcher = async (userId: string) => {
 
 const MyPage: React.FC = () => {
   const { userState, setUserState } = useCurrentUser();
+  const router = useRouter();
 
   const { data: collection, error } = useSWR(
     String(userState.currentUser.userId),
@@ -23,8 +30,15 @@ const MyPage: React.FC = () => {
   );
 
   if (error) {
-    return <span>エラー発生!</span>;
+    router.push("/signin-page")
   }
+
+  useEffect(() => {
+    const token = cookie.get("access_token");
+    if(!token){
+      router.push("/signin-page")
+    }
+  })
 
   return (
     <>
@@ -38,7 +52,7 @@ const MyPage: React.FC = () => {
               href="#"
               className="group w-full md:w-24 lg:w-40 h-56 md:h-24 lg:h-40 block self-start shrink-0 bg-gray-100 overflow-hidden rounded-lg shadow-lg relative"
             >
-              {collection.author.avatatar === "" ? (
+              {userState.currentUser.avatatar === "" ? (
                 <img
                   src="/img/avatar.jpeg"
                   loading="lazy"
@@ -47,7 +61,7 @@ const MyPage: React.FC = () => {
                 />
               ) : (
                 <img
-                  src={collection.author.avatatar}
+                  src={userState.currentUser.avatatar}
                   loading="lazy"
                   alt="Photo by Minh Pham"
                   className="w-full h-full object-cover object-center absolute inset-0 transition duration-200"
@@ -65,11 +79,12 @@ const MyPage: React.FC = () => {
 
               <p className="text-gray-400 text-xs">ひとこと:</p>
               <p className="text-gray-700 text-md">
-                {collection.author.remarks}
+                {userState.currentUser.remarks}
               </p>
             </div>
           </div>
         )}
+        <Edit />
         <div className="bg-white py-6 sm:py-8 lg:py-12">
           <div className="max-w-screen-xl px-4 md:px-8 mx-auto">
             <div className="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 md:gap-6 xl:gap-8">

@@ -22,8 +22,8 @@ const Login: React.FC = ({}) => {
         email: email,
         password: password,
       });
-      // const option = { path: "/" }う
-      // cookie.set("access_token", response.data, option);
+      const option = { path: "/" }
+      cookie.set("access_token", response.data, option);
       setUserState({
         type: "SET_CURRENT_USER",
         payload: {

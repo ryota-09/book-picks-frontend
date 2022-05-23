@@ -32,7 +32,8 @@ const CollectionDetail: React.FC<ReturnCollectionType> = ({
     <>
       <Layout title="Single Collection Page">
         <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-6">
-          Book List
+          {author && author.username}
+          {"'s Collection"}
         </h2>
         {collectionId && (
           <div className="flex flex-col md:flex-row items-center gap-4 lg:gap-6">

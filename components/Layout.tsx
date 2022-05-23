@@ -1,11 +1,20 @@
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import Cookie from "universal-cookie";
+
+const cookie = new Cookie();
 
 type TITLE = {
   title: string;
 };
 const Layout: React.FC<TITLE> = ({ children, title = "Nextjs" }) => {
+  const router = useRouter();
+  const logout = () => {
+    cookie.remove("access_token");
+    router.push("/book-collection")
+  }
   return (
     <>
       <div className="flex items-center flex-col min-h-screen">
@@ -76,6 +85,15 @@ const Layout: React.FC<TITLE> = ({ children, title = "Nextjs" }) => {
                     className="inline-block focus-visible:ring ring-indigo-300 text-gray-500 hover:text-indigo-500 active:text-indigo-600 text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-4 py-3"
                   >
                     Sign in
+                  </a>
+                </Link>
+                <Link href="#">
+                  <a
+                    onClick={logout}
+                    data-testid="signin-nav"
+                    className="inline-block focus-visible:ring ring-indigo-300 text-gray-500 hover:text-indigo-500 active:text-indigo-600 text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-4 py-3"
+                  >
+                    Sign out
                   </a>
                 </Link>
                 <Link href="/signup-page">
