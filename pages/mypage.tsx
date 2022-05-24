@@ -2,7 +2,7 @@
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 import Edit from "../components/Edit";
 import Layout from "../components/Layout";
@@ -21,6 +21,8 @@ const axiosFetcher = async (userId: string) => {
 };
 
 const MyPage: React.FC = () => {
+  const [isEdit, setIsEdit] = useState(false);
+
   const { userState, setUserState } = useCurrentUser();
   const router = useRouter();
 
@@ -30,15 +32,43 @@ const MyPage: React.FC = () => {
   );
 
   if (error) {
-    router.push("/signin-page")
+    router.push("/signin-page");
   }
+
+  const toggleIsEdit = () => {
+    setIsEdit(!isEdit);
+  };
+
+  const deleteBook = async (bookId: number) => {
+    try {
+      const response = await axios.delete("http://localhost:3001/db/delete", {
+        data: {
+          bookId: bookId,
+        },
+      });
+      const updatedList =
+        userState.currentUser.userBookCollection.bookList.filter(
+          (book) => book.bookId !== bookId
+        );
+      if (response.status === 201) {
+        setUserState({
+          type: "SET_BOOKLIST",
+          payload: {
+            bookList: updatedList,
+          },
+        });
+      }
+    } catch {
+      alert("エラーが発生");
+    }
+  };
 
   useEffect(() => {
     const token = cookie.get("access_token");
-    if(!token){
-      router.push("/signin-page")
+    if (!token) {
+      router.push("/signin-page");
     }
-  })
+  }, []);
 
   return (
     <>
@@ -76,7 +106,6 @@ const MyPage: React.FC = () => {
                   {collection.author.username}
                 </p>
               </h2>
-
               <p className="text-gray-400 text-xs">ひとこと:</p>
               <p className="text-gray-700 text-md">
                 {userState.currentUser.remarks}
@@ -84,60 +113,73 @@ const MyPage: React.FC = () => {
             </div>
           </div>
         )}
-        <Edit />
+        <button
+          onClick={toggleIsEdit}
+          type="button"
+          className="inline-block bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700 focus-visible:ring ring-indigo-300 text-white text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3 mt-10"
+        >
+          {!isEdit ? "編集モード" : "編集画面を閉じる"}
+        </button>
+        <Edit isEdit={isEdit} setIsEdit={setIsEdit} />
         <div className="bg-white py-6 sm:py-8 lg:py-12">
           <div className="max-w-screen-xl px-4 md:px-8 mx-auto">
             <div className="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 md:gap-6 xl:gap-8">
               {collection &&
-                collection.bookList.map((book, index) => (
-                  <div
-                    className="flex flex-col md:flex-row items-center border overflow-hidden"
-                    key={index}
-                  >
-                    <a
-                      href={book.link}
-                      className="group w-full md:w-32 lg:w-48 h-48 md:h-full block self-start shrink-0 bg-gray-100 overflow-hidden relative"
+                collection.bookList.map(
+                  (book, index) => (
+                    <div
+                      className="flex flex-col md:flex-row items-center border overflow-hidden"
+                      key={index}
                     >
-                      <img
-                        src={book.imgPath}
-                        loading="lazy"
-                        alt="Photo by Minh Pham"
-                        className="w-full h-full object-cover object-center absolute inset-0 group-hover:scale-110 transition duration-200"
-                      />
-                    </a>
-
-                    <div className="flex flex-col gap-2 p-4 lg:p-6">
-                      <span className="text-gray-400 text-sm">Title:</span>
-
-                      <h2 className="text-gray-800 text-xl font-bold">
-                        <a
-                          href={book.link}
-                          className="hover:text-indigo-500 active:text-indigo-600 transition duration-100"
-                        >
-                          {book.title}
-                        </a>
-                      </h2>
-
-                      <p className="text-gray-500">引用URL:</p>
-
-                      <div className="mb-5">
-                        <a
-                          href={book.sourceUrl}
-                          className="text-indigo-500 hover:text-indigo-600 active:text-indigo-700 font-semibold transition duration-100"
-                        >
-                          {book.sourceUrl}
-                        </a>
-                      </div>
-                      <button
-                        className="bg-indigo-500 text-white p-3 rounded"
-                        type="button"
-                        onClick={() => {}}
+                      <a
+                        href={book.link}
+                        className="group w-full md:w-32 lg:w-48 h-48 md:h-full block self-start shrink-0 bg-gray-100 overflow-hidden relative"
                       >
-                        Save
-                      </button>
+                        <img
+                          src={book.imgPath}
+                          loading="lazy"
+                          alt="Photo by Minh Pham"
+                          className="w-full h-full object-cover object-center absolute inset-0 group-hover:scale-110 transition duration-200"
+                        />
+                      </a>
+
+                      <div className="flex flex-col gap-2 p-4 lg:p-6">
+                        <span className="text-gray-400 text-sm">Title:</span>
+
+                        <h2 className="text-gray-800 text-xl font-bold">
+                          <a
+                            href={book.link}
+                            className="hover:text-indigo-500 active:text-indigo-600 transition duration-100"
+                          >
+                            {book.title}
+                          </a>
+                        </h2>
+
+                        <p className="text-gray-500">引用URL:</p>
+
+                        <div className="mb-5">
+                          <a
+                            href={book.sourceUrl}
+                            className="text-indigo-500 hover:text-indigo-600 active:text-indigo-700 font-semibold transition duration-100"
+                          >
+                            {book.sourceUrl}
+                          </a>
+                        </div>
+                        {isEdit ? (
+                          <button
+                            className="bg-red-500 text-white p-3 rounded"
+                            type="button"
+                            onClick={() => deleteBook(book.bookId)}
+                          >
+                            Delete
+                          </button>
+                        ) : (
+                          ""
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                )}
             </div>
           </div>
         </div>

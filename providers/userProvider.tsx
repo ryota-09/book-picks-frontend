@@ -1,4 +1,6 @@
 import { createContext, Dispatch, ReactNode, useReducer } from "react";
+import { BookCollectionModel } from "../types/BookCollectionModel";
+import { BookModel } from "../types/BookModel";
 import { UserModel } from "../types/UserModel";
 
 type State = {
@@ -7,9 +9,14 @@ type State = {
 };
 
 type Action = {
-  type: "SET_CURRENT_USER" | "TOGGLE_ISLOGIN" | "INITIALIZE_USER_STATE";
+  type:
+    | "SET_CURRENT_USER"
+    | "TOGGLE_ISLOGIN"
+    | "INITIALIZE_USER_STATE"
+    | "SET_BOOKLIST";
   payload: {
     currentUser?: UserModel;
+    bookList?: BookModel[];
     isLogin?: boolean;
   };
 };
@@ -29,7 +36,13 @@ const initialUserState: State = {
     password: "",
     avatatar: "",
     remarks: "",
-    userBookCollection: null,
+    userBookCollection: {
+      collectionId: 0,
+      authorId: 0,
+      author: null,
+      bookList: [],
+      likeCount: 0,
+    },
   },
   isLogin: false,
 };
@@ -50,6 +63,17 @@ const reducer = (state: State, action: Action) => {
       return {
         currentUser: action.payload.currentUser,
         isLogin: action.payload.isLogin,
+      };
+    case "SET_BOOKLIST":
+      return {
+        currentUser: {
+          userBookCollection: {
+            bookList: action.payload.bookList,
+            ...state.currentUser.userBookCollection,
+          },
+          ...state.currentUser,
+        },
+        isLogin: state.isLogin,
       };
     default:
       return state;

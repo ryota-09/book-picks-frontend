@@ -114,13 +114,17 @@ const CollectionDetail: React.FC<ReturnCollectionType> = ({
                           {book.sourceUrl}
                         </a>
                       </div>
-                      <button
-                        className="bg-indigo-500 text-white p-3 rounded"
-                        type="button"
-                        onClick={() => saveToDb(book)}
-                      >
-                        Save
-                      </button>
+                      {userState.currentUser.userId === 0 ? (
+                        ""
+                      ) : (
+                        <button
+                          className="bg-indigo-500 text-white p-3 rounded"
+                          type="button"
+                          onClick={() => saveToDb(book)}
+                        >
+                          Save
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}

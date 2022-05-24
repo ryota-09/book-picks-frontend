@@ -1,18 +1,20 @@
 import axios from "axios";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useCurrentUser } from "../lib/useCurrentUser";
 import { UserModel } from "../types/UserModel";
 
-const Edit: React.FC = () => {
+
+type Props = {
+  isEdit: boolean;
+  setIsEdit: Dispatch<SetStateAction<boolean>>
+}
+
+const Edit: React.FC<Props> = ({ isEdit, setIsEdit }) => {
   const [avatar, setAvatar] = useState("");
   const [remarks, setRemarks] = useState("");
-  const [isEdit, setIsEdit] = useState(false);
+  
 
   const { userState, setUserState } = useCurrentUser();
-
-  const toggleIsEdit = () => {
-    setIsEdit(!isEdit);
-  }
 
   const updateUserInfo = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,13 +46,6 @@ const Edit: React.FC = () => {
 
   return (
     <>
-      <button
-        onClick={toggleIsEdit}
-        type="button"
-        className="inline-block bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700 focus-visible:ring ring-indigo-300 text-white text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3 mt-10"
-      >
-        {!isEdit ? "編集モード" : "編集画面を閉じる"}
-      </button>
       {isEdit ? (
         <div className="bg-white py-6 sm:py-8 lg:py-12">
           <div className="max-w-screen-2xl px-4 md:px-8 mx-auto">

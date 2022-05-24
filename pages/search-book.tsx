@@ -19,7 +19,7 @@ const SearchBook = () => {
   const [sourceUrl, setSourceUrl] = useState("");
   const [bookInfoList, setBookInfoList] = useState<BookInfo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [ error, setError ] = useState("");
+  const [error, setError] = useState("");
 
   const { userState } = useCurrentUser();
 
@@ -30,20 +30,20 @@ const SearchBook = () => {
   const scrapingText = async () => {
     setError("");
     setIsLoading(true);
-    try{
+    try {
       const response = await axios.post("http://localhost:3001/scraping", {
         searchText: searchText,
       });
-      console.log(response)
-      if(response.status === 201 && response.data.bookInfoList.length !== 0){
+      console.log(response);
+      if (response.status === 201 && response.data.bookInfoList.length !== 0) {
         setSourceUrl(response.data.url);
         setBookInfoList(response.data.bookInfoList);
       } else {
-        setError("本が見つかりませんでした。。。")
+        setError("本が見つかりませんでした。。。");
       }
-    }catch{
-      setError("【Error】もう一度試してみよう!")
-    }finally{
+    } catch {
+      setError("【Error】もう一度試してみよう!");
+    } finally {
       setIsLoading(false);
     }
   };
@@ -79,7 +79,9 @@ const SearchBook = () => {
         >
           検索
         </button>
-        {error && <p className="mt-5 mb-5 text-red-600 font-bold text-3xl">{error}</p>}
+        {error && (
+          <p className="mt-5 mb-5 text-red-600 font-bold text-3xl">{error}</p>
+        )}
         <br />
         {isLoading ? (
           <Loading />
@@ -126,13 +128,17 @@ const SearchBook = () => {
                           {sourceUrl}
                         </a>
                       </div>
-                      <button
-                        className="bg-indigo-500 text-white p-3 rounded"
-                        type="button"
-                        onClick={() => saveToDb(bookInfo)}
-                      >
-                        Save
-                      </button>
+                      {userState.currentUser.userId === 0 ? (
+                        ""
+                      ) : (
+                        <button
+                          className="bg-indigo-500 text-white p-3 rounded"
+                          type="button"
+                          onClick={() => saveToDb(bookInfo)}
+                        >
+                          Save
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}

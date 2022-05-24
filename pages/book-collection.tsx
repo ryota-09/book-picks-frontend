@@ -6,6 +6,7 @@ import { ReturnCollectionType } from "../types/BookCollection";
 import { getAllCollections, getCollectionData } from "../lib/fetch";
 import Layout from "../components/Layout";
 import Link from "next/link";
+import LikeCount from "../components/LikeCount";
 
 type StaticProps = {
   collectionData: ReturnCollectionType[];
@@ -68,13 +69,14 @@ const BookCollection: React.FC<StaticProps> = ({ collectionData }) => {
                     </Link>
 
                     {collection.bookList.map((book) => (
+                      <div key={book.bookId}>
                       <p
                         className="text-gray-500 mb-2 text-xs"
-                        key={book.bookId}
+                        
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
+                          className="h-5 w-5"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -88,10 +90,10 @@ const BookCollection: React.FC<StaticProps> = ({ collectionData }) => {
                         </svg>
                         {book.title}
                       </p>
+
+                      </div>
                     ))}
-                    <p className="font-semibold mb-2">
-                      🌟 &nbsp;{collection.likeCount}
-                    </p>
+                    <LikeCount collectionId={collection.collectionId} likeCount={collection.likeCount} />
                     <Link href={`/collection/${collection.collectionId}`}>
                       <a
                         className="text-indigo-500 hover:text-indigo-600 active:text-indigo-700 font-semibold transition duration-100"
