@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookie from "universal-cookie";
+import { useCurrentUser } from "../lib/useCurrentUser";
 
 const cookie = new Cookie();
 
@@ -10,11 +11,33 @@ type TITLE = {
   title: string;
 };
 const Layout: React.FC<TITLE> = ({ children, title = "Nextjs" }) => {
+  const { setUserState } = useCurrentUser();
   const router = useRouter();
   const logout = () => {
     cookie.remove("access_token");
-    router.push("/book-collection")
-  }
+    setUserState({
+      type: "INITIALIZE_USER_STATE",
+      payload: {
+        currentUser: {
+          userId: 0,
+          username: "",
+          email: "",
+          password: "",
+          avatatar: "",
+          remarks: "",
+          userBookCollection: {
+            collectionId: 0,
+            authorId: 0,
+            author: null,
+            bookList: [],
+            likeCount: 0,
+          },
+        },
+        isLogin: false,
+      },
+    });
+    router.push("/book-collection");
+  };
   return (
     <>
       <div className="flex items-center flex-col min-h-screen">
@@ -97,13 +120,12 @@ const Layout: React.FC<TITLE> = ({ children, title = "Nextjs" }) => {
                   </a>
                 </Link>
                 <Link href="/signup-page">
-                <a
-                  data-testid="signup-nav"
-                  className="inline-block bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700 focus-visible:ring ring-indigo-300 text-white text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3"
-                >
-                  Sign up
-                </a>
-
+                  <a
+                    data-testid="signup-nav"
+                    className="inline-block bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700 focus-visible:ring ring-indigo-300 text-white text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-8 py-3"
+                  >
+                    Sign up
+                  </a>
                 </Link>
               </div>
 
