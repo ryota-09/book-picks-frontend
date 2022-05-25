@@ -76,7 +76,7 @@ describe("pages/BookCollection.tsx", () => {
 
     render(page);
     expect(await screen.findByText("Book Collection")).toBeInTheDocument();
-    userEvent.click(screen.getByTestId("collectionId"));
-    expect(await screen.findByText("Single Collection Page")).toBeInTheDocument();
+    userEvent.click(screen.getByTestId("collection-id"));
+    expect(await screen.findByText("テストname's Collection")).toBeInTheDocument();
   })
 });

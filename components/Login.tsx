@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import Cookie from "universal-cookie";
 import { useCurrentUser } from "../lib/useCurrentUser";
+import SuccessToast from "./SuccessToast";
 
 const cookie = new Cookie();
 
@@ -11,6 +12,7 @@ const Login: React.FC = ({}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [canShow, setCanShow] = useState(false);
 
   const { setUserState } = useCurrentUser();
 
@@ -22,7 +24,8 @@ const Login: React.FC = ({}) => {
         email: email,
         password: password,
       });
-      const option = { path: "/" }
+      setCanShow(!canShow);
+      const option = { path: "/" };
       cookie.set("access_token", response.data, option);
       setUserState({
         type: "SET_CURRENT_USER",
@@ -31,7 +34,9 @@ const Login: React.FC = ({}) => {
           isLogin: true,
         },
       });
-      router.push("/book-collection");
+      setTimeout(() => {
+        router.push("/book-collection");
+      },600)
     } catch {
       setError("ログインエラーが発生しました。");
     }
@@ -40,6 +45,15 @@ const Login: React.FC = ({}) => {
   return (
     <>
       <p className="text-3xl text-center mt-8">Sign In</p>
+      {canShow ? (
+        <SuccessToast
+          canShow={canShow}
+          setCanShow={setCanShow}
+          displayText="ログイン成功！"
+        />
+      ) : (
+        ""
+      )}
       <form onSubmit={login} className="mt-8 space-y-3">
         <div>
           <input

@@ -8,6 +8,7 @@ import Image from "next/image";
 import Layout from "../components/Layout";
 import { useCurrentUser } from "../lib/useCurrentUser";
 import Loading from "../components/Loading";
+import SuccessToast from "../components/SuccessToast";
 
 type ScrapingResponseType = {
   sourceUrl: string;
@@ -20,6 +21,7 @@ const SearchBook = () => {
   const [bookInfoList, setBookInfoList] = useState<BookInfo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [canShow, setCanShow] = useState(false);
 
   const { userState } = useCurrentUser();
 
@@ -56,7 +58,7 @@ const SearchBook = () => {
       imgPath: bookInfo.src,
       sourceUrl: sourceUrl,
     });
-    console.log("responseデータ", response.data);
+    setCanShow(!canShow);
   };
 
   return (
@@ -64,6 +66,15 @@ const SearchBook = () => {
       <h2 className="text-gray-800 text-2xl lg:text-3xl font-bold text-center mb-4 md:mb-6">
         Search Books
       </h2>
+      {canShow ? (
+        <SuccessToast
+          canShow={canShow}
+          setCanShow={setCanShow}
+          displayText="保存に成功しました！"
+        />
+      ) : (
+        ""
+      )}
       <div className="flex flex-1 justify-center items-center flex-col w-screen">
         <p>例: フロントエンドエンジニア　本</p>
         <input

@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookie from "universal-cookie";
 import { useCurrentUser } from "../lib/useCurrentUser";
+import { useState } from "react";
+import SuccessToast from "./SuccessToast";
 
 const cookie = new Cookie();
 
@@ -11,6 +13,7 @@ type TITLE = {
   title: string;
 };
 const Layout: React.FC<TITLE> = ({ children, title = "Nextjs" }) => {
+  const [canShow, setCanShow] = useState(false);
   const { setUserState } = useCurrentUser();
   const router = useRouter();
   const logout = () => {
@@ -36,7 +39,10 @@ const Layout: React.FC<TITLE> = ({ children, title = "Nextjs" }) => {
         isLogin: false,
       },
     });
-    router.push("/book-collection");
+    setCanShow(!canShow);
+    setTimeout(() => {
+      router.push("/book-collection");
+    }, 600);
   };
   return (
     <>
@@ -44,6 +50,15 @@ const Layout: React.FC<TITLE> = ({ children, title = "Nextjs" }) => {
         <Head>
           <title>{title}</title>
         </Head>
+        {canShow ? (
+          <SuccessToast
+            canShow={canShow}
+            setCanShow={setCanShow}
+            displayText="ログアウトに成功しました！"
+          />
+        ) : (
+          ""
+        )}
         <div className="bg-white lg:pb-12">
           <div className="max-w-screen-2xl px-4 md:px-8 mx-auto">
             <header className="flex justify-between items-center py-4 md:py-8">
@@ -113,7 +128,7 @@ const Layout: React.FC<TITLE> = ({ children, title = "Nextjs" }) => {
                 <Link href="#">
                   <a
                     onClick={logout}
-                    data-testid="signin-nav"
+                    data-testid="signout-nav"
                     className="inline-block focus-visible:ring ring-indigo-300 text-gray-500 hover:text-indigo-500 active:text-indigo-600 text-sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-4 py-3"
                   >
                     Sign out

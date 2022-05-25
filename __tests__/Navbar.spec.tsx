@@ -15,12 +15,11 @@ describe("components/Layout.tsx", () => {
     })
     render(page);
     userEvent.click(await screen.getByTestId("search-nav"));
-    expect(await screen.findByText("Search Book")).toBeInTheDocument();
+    expect(await screen.findByText("Search Books")).toBeInTheDocument();
     userEvent.click(await screen.getByTestId("collection-nav"));
     expect(await screen.findByText("Book Collection")).toBeInTheDocument();
     userEvent.click(await screen.getByTestId("signin-nav"));
-    await screen.findByText("SignIn")
     expect(await screen.findByText("Sign In")).toBeInTheDocument();
-    screen.debug();
+    // screen.debug();
   })
 })

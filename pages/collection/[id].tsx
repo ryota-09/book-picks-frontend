@@ -2,7 +2,9 @@
 import axios from "axios";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
+import { useState } from "react";
 import Layout from "../../components/Layout";
+import SuccessToast from "../../components/SuccessToast";
 
 import { getAllCollectionIds, getCollectionData } from "../../lib/fetch";
 import { useCurrentUser } from "../../lib/useCurrentUser";
@@ -15,6 +17,7 @@ const CollectionDetail: React.FC<ReturnCollectionType> = ({
   bookList,
   likeCount,
 }) => {
+  const [canShow, setCanShow] = useState(false);
   const { userState } = useCurrentUser();
 
   const saveToDb = async (book: BookModel) => {
@@ -26,6 +29,7 @@ const CollectionDetail: React.FC<ReturnCollectionType> = ({
       sourceUrl: book.sourceUrl,
     });
     // stateにbookを保存 setUserState
+    setCanShow(!canShow);
   };
 
   return (
@@ -35,6 +39,15 @@ const CollectionDetail: React.FC<ReturnCollectionType> = ({
           {author && author.username}
           {"'s Collection"}
         </h2>
+        {canShow ? (
+          <SuccessToast
+            canShow={canShow}
+            setCanShow={setCanShow}
+            displayText="保存に成功しました！"
+          />
+        ) : (
+          ""
+        )}
         {collectionId && (
           <div className="flex flex-col md:flex-row items-center gap-4 lg:gap-6">
             <a
@@ -114,9 +127,7 @@ const CollectionDetail: React.FC<ReturnCollectionType> = ({
                           {book.sourceUrl}
                         </a>
                       </div>
-                      {userState.currentUser.userId === 0 ? (
-                        ""
-                      ) : (
+                      {userState.currentUser.userId !== 0 ? (
                         <button
                           className="bg-indigo-500 text-white p-3 rounded"
                           type="button"
@@ -124,7 +135,8 @@ const CollectionDetail: React.FC<ReturnCollectionType> = ({
                         >
                           Save
                         </button>
-                      )}
+                      ) : ""
+                      }
                     </div>
                   </div>
                 ))}

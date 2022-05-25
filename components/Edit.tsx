@@ -1,8 +1,15 @@
 import axios from "axios";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+
 import { useCurrentUser } from "../lib/useCurrentUser";
 import { UserModel } from "../types/UserModel";
+import FileUpload from "./FileUpload";
 
+const supabase = createClient(
+  "https://ccgvudsttqanziwuqdob.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjZ3Z1ZHN0dHFhbnppd3VxZG9iIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTE1NTkyNDQsImV4cCI6MTk2NzEzNTI0NH0.-kcIAWGruW4momnH-bdq6Z-W0U6k3eGGyD7zMPbFM0c"
+);
 
 type Props = {
   isEdit: boolean;
@@ -10,14 +17,35 @@ type Props = {
 }
 
 const Edit: React.FC<Props> = ({ isEdit, setIsEdit }) => {
-  const [avatar, setAvatar] = useState("");
   const [remarks, setRemarks] = useState("");
+  const [image, setImage] = useState<File>();
   
 
   const { userState, setUserState } = useCurrentUser();
 
+  const urlFormater = (key: string): string => {
+    return key.replace("avatar/", "");
+  };
+
+  const uploadFile = async () => {
+    const { data, error } = await supabase.storage
+      .from("avatar")
+      .upload(`avatar${userState.currentUser.userId}`, image);
+
+    const key = data.Key;
+
+    if (!key) {
+      throw new Error("Error");
+    }
+    const { publicURL } = await supabase.storage
+      .from(`avatar`)
+      .getPublicUrl(urlFormater(key));
+    return publicURL
+  };
+
   const updateUserInfo = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const avatar = await uploadFile();
     const response = await axios.patch<UserModel>(
       "http://localhost:3001/db/update",
       {
@@ -63,14 +91,16 @@ const Edit: React.FC<Props> = ({ isEdit, setIsEdit }) => {
                 <label className="inline-block text-gray-800 text-sm sm:text-base mb-2">
                   icon:
                 </label>
-                <input
+                {/* <input
                   onChange={(e) => setAvatar(e.target.value)}
                   name="company"
                   className="w-full bg-gray-50 text-gray-800 border focus:ring ring-indigo-300 rounded outline-none transition duration-100 px-3 py-2"
-                />
+                /> */}
+                <br />
+                <FileUpload setImage={setImage} />
               </div>
 
-              <div className="sm:col-span-2">
+              <div className="sm:col-span-2 mt-3">
                 <label className="inline-block text-gray-800 text-sm sm:text-base mb-2">
                   ひとこと:
                 </label>

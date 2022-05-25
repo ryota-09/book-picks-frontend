@@ -10,6 +10,7 @@
     "test": "jest --env=jsdom --verbose"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^1.35.3",
     "autoprefixer": "^10.4.7",
     "axios": "^0.21.1",
     "msw": "^0.35.0",
