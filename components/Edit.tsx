@@ -7,8 +7,8 @@ import { UserModel } from "../types/UserModel";
 import FileUpload from "./FileUpload";
 
 const supabase = createClient(
-  "https://ccgvudsttqanziwuqdob.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjZ3Z1ZHN0dHFhbnppd3VxZG9iIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTE1NTkyNDQsImV4cCI6MTk2NzEzNTI0NH0.-kcIAWGruW4momnH-bdq6Z-W0U6k3eGGyD7zMPbFM0c"
+  process.env.NEXT_PUBLIC_SUPABASE_BASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_API_KEY
 );
 
 type Props = {

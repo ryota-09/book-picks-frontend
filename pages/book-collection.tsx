@@ -10,12 +10,12 @@ import LikeCount from "../components/LikeCount";
 
 
 
+
 type StaticProps = {
   collectionData: ReturnCollectionType[];
 };
 
 const BookCollection: React.FC<StaticProps> = ({ collectionData }) => {
-  
   return (
     <Layout title="Book Collection">
       <div className="bg-white py-6 sm:py-8 lg:py-12">
