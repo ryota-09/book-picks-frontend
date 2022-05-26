@@ -2,7 +2,7 @@
 import axios from "axios";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
 import SuccessToast from "../../components/SuccessToast";
 

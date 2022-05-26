@@ -46,11 +46,11 @@ const MyPage: React.FC = () => {
           bookId: bookId,
         },
       });
-      const updatedList =
-        userState.currentUser.userBookCollection.bookList.filter(
-          (book) => book.bookId !== bookId
-        );
       if (response.status === 201) {
+        const updatedList =
+          userState.currentUser.userBookCollection.bookList.filter(
+            (book) => book.bookId !== bookId
+          );
         setUserState({
           type: "SET_BOOKLIST",
           payload: {
@@ -58,7 +58,8 @@ const MyPage: React.FC = () => {
           },
         });
       }
-    } catch {
+    } catch(error) {
+      console.log("デリートエラー", error);
       alert("エラーが発生");
     }
   };

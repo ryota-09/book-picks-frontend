@@ -15,7 +15,6 @@ const SuccessToast: React.FC<Props> = ({
     <>
       <div
         className="alert-toast fixed bottom-0 right-0 m-8 w-5/6 md:w-full max-w-sm"
-        onClick={() => setCanShow(!canShow)}
       >
         <input type="checkbox" className="hidden" id="footertoast" />
 
