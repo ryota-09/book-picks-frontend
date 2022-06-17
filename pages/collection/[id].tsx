@@ -21,7 +21,7 @@ const CollectionDetail: React.FC<ReturnCollectionType> = ({
   const { userState } = useCurrentUser();
 
   const saveToDb = async (book: BookModel) => {
-    const response = await axios.patch("http://localhost:3001/db/addBook", {
+    const response = await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/db/addBook`, {
       userId: userState.currentUser.userId,
       title: book.title,
       link: book.link,

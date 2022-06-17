@@ -13,7 +13,7 @@ const LikeCount: React.FC<PropsType> = ({ collectionId, likeCount }) => {
   const countUp = async () => {
     try {
       const response = await axios.patch(
-        "http://localhost:3001/db/likeCount/up",
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/db/likeCount/up`,
         {
           collectionId: collectionId,
           likeCount: targetCount,
@@ -32,7 +32,7 @@ const LikeCount: React.FC<PropsType> = ({ collectionId, likeCount }) => {
   const countDown = async () => {
     try {
       const response = await axios.patch(
-        "http://localhost:3001/db/likeCount/down",
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/db/likeCount/down`,
         {
           collectionId: collectionId,
           likeCount: targetCount,

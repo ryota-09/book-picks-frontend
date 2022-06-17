@@ -15,7 +15,7 @@ const cookie = new Cookie();
 
 const axiosFetcher = async (userId: string) => {
   const response = await axios.get<ReturnCollectionType>(
-    `http://localhost:3001/db/${userId}`
+    `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/db/${userId}`
   );
   return response.data;
 };
@@ -41,7 +41,7 @@ const MyPage: React.FC = () => {
 
   const deleteBook = async (bookId: number) => {
     try {
-      const response = await axios.delete("http://localhost:3001/db/delete", {
+      const response = await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/db/delete`, {
         data: {
           bookId: bookId,
         },

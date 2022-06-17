@@ -2,14 +2,14 @@ import fetch from "node-fetch";
 import { ReturnCollectionType } from "../types/BookCollection";
 
 export const getAllCollections = async () => {
-  const response = await fetch(new URL("http://localhost:3001/db"));
+  const response = await fetch(new URL(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/db`));
   const collectionListData = response.json();
   return collectionListData;
 };
 
 export const getAllCollectionIds = async () => {
   const response = await fetch(
-    new URL("http://localhost:3001/db")
+    new URL(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/db`)
   )
   const collectionList = await response.json();
   return collectionList.map((collection) => {
@@ -23,7 +23,7 @@ export const getAllCollectionIds = async () => {
 
 export const getCollectionData = async (id: string) => {
   const response = await fetch(
-    new URL(`http://localhost:3001/db/${id}`)
+    new URL(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/db/${id}`)
   )
   const collection = await response.json()
   return collection

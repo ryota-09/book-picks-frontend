@@ -3,12 +3,12 @@ import { BookCollectionModel } from "../types/BookCollectionModel";
 import { BookModel } from "../types/BookModel";
 import { UserModel } from "../types/UserModel";
 
-type State = {
+export type State = {
   currentUser: UserModel;
   isLogin: boolean;
 };
 
-type Action = {
+export type Action = {
   type:
     | "SET_CURRENT_USER"
     | "TOGGLE_ISLOGIN"
@@ -47,7 +47,7 @@ const initialUserState: State = {
   isLogin: false,
 };
 
-const reducer = (state: State, action: Action) => {
+export const reducer = (state: State, action: Action) => {
   switch (action.type) {
     case "SET_CURRENT_USER":
       return {

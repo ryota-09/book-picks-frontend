@@ -47,7 +47,7 @@ const Edit: React.FC<Props> = ({ isEdit, setIsEdit }) => {
     e.preventDefault();
     const avatar = await uploadFile();
     const response = await axios.patch<UserModel>(
-      "http://localhost:3001/db/update",
+      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/db/update`,
       {
         userId: userState.currentUser.userId,
         avatatar: avatar,

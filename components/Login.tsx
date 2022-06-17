@@ -19,7 +19,7 @@ const Login: React.FC = ({}) => {
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3001/auth/login", {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/auth/login`, {
         username: "",
         email: email,
         password: password,
@@ -60,6 +60,7 @@ const Login: React.FC = ({}) => {
             type="email"
             required
             className="px-3 py-2 border border-gray-300"
+            id="email-area"
             placeholder="Email"
             value={email}
             onChange={(e) => {
@@ -72,6 +73,7 @@ const Login: React.FC = ({}) => {
             type="password"
             required
             className="px-3 py-2 border border-gray-300"
+            id="password-area"
             placeholder="Password"
             value={password}
             onChange={(e) => {
@@ -84,6 +86,7 @@ const Login: React.FC = ({}) => {
           <button
             disabled={!password || !email}
             type="submit"
+            id="submit-button"
             className="disabled:opacity-40 py-2 px-4 text-white bg-indigo-500 hover:bg-indigo-700 focus:outline-none"
           >
             Sign In

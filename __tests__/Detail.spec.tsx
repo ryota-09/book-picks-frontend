@@ -163,4 +163,17 @@ describe("collection/[id].tsx", () => {
     expect(screen.getByText("テストtitle5")).toBeInTheDocument();
     expect(screen.getByText("テストtitle6")).toBeInTheDocument();
   })
+
+  test("正常系: userId2のcollectionページが表示される。", async () => {
+    const { page } = await getPage({
+      route: "/collection/2"
+    });
+    render(page);
+
+    expect(await screen.findByText("テストname's Collection")).toBeInTheDocument();
+    expect(screen.getByText("テストtitle1")).toBeInTheDocument();
+    expect(screen.getByText("テストtitle2")).toBeInTheDocument();
+  })
+
+  test("正常系: ")
 })

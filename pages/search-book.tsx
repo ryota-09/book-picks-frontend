@@ -33,7 +33,7 @@ const SearchBook = () => {
     setError("");
     setIsLoading(true);
     try {
-      const response = await axios.post("http://localhost:3001/scraping", {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/scraping`, {
         searchText: searchText,
       });
       console.log(response);
@@ -51,7 +51,7 @@ const SearchBook = () => {
   };
 
   const saveToDb = async (bookInfo: BookInfo) => {
-    const response = await axios.patch("http://localhost:3001/db/addBook", {
+    const response = await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/db/addBook`, {
       userId: userState.currentUser.userId,
       title: bookInfo.title,
       link: bookInfo.link,
@@ -79,6 +79,7 @@ const SearchBook = () => {
         <p>例: フロントエンドエンジニア　本</p>
         <input
           type="text"
+          id="search-area"
           className="bg-gray-200 m-5 rounded w-6/12"
           placeholder="検索キーワード"
           onChange={changeText}
