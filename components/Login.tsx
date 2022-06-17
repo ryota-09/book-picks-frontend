@@ -92,6 +92,8 @@ const Login: React.FC = ({}) => {
             Sign In
           </button>
         </div>
+        <p>email: ex05@gmail.com</p>
+        <p>パスワード: password</p>
       </form>
       {error && <p className="mt-5 text-red-600">{error}</p>}
     </>
