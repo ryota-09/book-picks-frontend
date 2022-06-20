@@ -14,6 +14,8 @@ type TITLE = {
 };
 const Layout: React.FC<TITLE> = ({ children, title = "Nextjs" }) => {
   const [canShow, setCanShow] = useState(false);
+  const [isOpen , setIsOpen] = useState(false);
+
   const { setUserState } = useCurrentUser();
   const router = useRouter();
   const logout = () => {
@@ -146,11 +148,23 @@ const Layout: React.FC<TITLE> = ({ children, title = "Nextjs" }) => {
 
               <button
                 type="button"
+                onClick={() => setIsOpen(!isOpen)}
                 className="inline-flex items-center lg:hidden bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-indigo-300 text-gray-500 active:text-gray-700 text-sm md:text-base font-semibold rounded-lg gap-2 px-2.5 py-2"
               >
-                Menu
+                {isOpen ? "×" : "Menu"}
               </button>
             </header>
+            {isOpen && 
+            <ul className="absolute z-10 bg-white">
+  <li className="border-b"><Link href="/search-book"><a className="block px-8 py-2 my-4 hover:bg-gray-400 hover:text-white rounded">Search</a></Link></li>
+  <li className="border-b"><Link href="/book-collection"><a className="block px-8 py-2 my-4 hover:bg-gray-400 hover:text-white rounded">Collection</a></Link></li>
+  <li className="border-b"><Link href="/mypage"><a className="block px-8 py-2 my-4 hover:bg-gray-400 hover:text-white rounded">MyPage</a></Link></li>
+  <li className="border-b"><Link href="/signin-page"><a className="block px-8 py-2 my-4 hover:bg-gray-400 hover:text-white rounded">Sign in</a></Link></li>
+  <li className="border-b"><Link href="#"><a onClick={logout} className="block px-8 py-2 my-4 hover:bg-gray-400 hover:text-white rounded">Sign out</a></Link></li>
+  <li className="border-b"><Link href="/signup-page"><a className="block px-8 py-2 my-4 hover:bg-indigo-400 hover:text-white rounded">Sign up</a></Link></li>
+</ul>
+            
+            }
           </div>
           <main className="flex flex-1 items-center flex-col w-screen">
             {children}
