@@ -7,15 +7,28 @@ import { getAllCollections, getCollectionData } from "../lib/fetch";
 import Layout from "../components/Layout";
 import Link from "next/link";
 import LikeCount from "../components/LikeCount";
+import useSWR from "swr";
+import axios from "axios";
 
 
 
 
 type StaticProps = {
-  collectionData: ReturnCollectionType[];
+  staticCollectionData: ReturnCollectionType[];
 };
 
-const BookCollection: React.FC<StaticProps> = ({ collectionData }) => {
+const axiosFetcher = async () => {
+  const response = await axios.get<ReturnCollectionType[]>(
+    `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/db`
+  );
+  return response.data;
+};
+
+const BookCollection: React.FC<StaticProps> = ({ staticCollectionData }) => {
+  const { data: collectionData, error } = useSWR("collectionFetcher",axiosFetcher, {
+    fallbackData: staticCollectionData,
+      revalidateOnMount: true,
+  })
   return (
     <Layout title="Book Collection">
       <div className="bg-white py-6 sm:py-8 lg:py-12">
@@ -122,5 +135,6 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       collectionData,
     },
+    revalidate: 5
   };
 };

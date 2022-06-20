@@ -3,6 +3,9 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { useCurrentUser } from "../lib/useCurrentUser";
 import { UserModel } from "../types/UserModel";
+import Cookies from "universal-cookie";
+
+const cookie = new Cookies();
 
 const Register: React.FC = ({}) => {
   const router = useRouter();
@@ -22,8 +25,8 @@ const Register: React.FC = ({}) => {
         password: password,
       });
       console.log(response.data);
-      // const option = { path: "/" };
-      // cookie.set("access_token", response.data, option);
+      const option = { path: "/" };
+      cookie.set("access_token", response.data, option);
       setUserState({
         type: "SET_CURRENT_USER",
         payload: {
